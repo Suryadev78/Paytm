@@ -1,4 +1,4 @@
-Basic Paytm Version of Paytm
+Basic Version of Paytm
 Created a basic version of Paytm Which includes both Frontend and Backend Using MERN stack
 
 -How it Looks
