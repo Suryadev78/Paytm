@@ -7,8 +7,11 @@ Created a basic version of Paytm Which includes both Frontend and Backend Using 
 ![Screenshot (25)](https://github.com/user-attachments/assets/5e7379b4-2573-4171-8883-9f96ea8ab3bf)
 
 Setup the Project Locally
+
 Clone the repository
+
 Go to the project folder using an IDE of your preference
+
 In the backend folder,go to db folder and add your MongoDb URL/Connection string
 Open the terminal and run following command
 
