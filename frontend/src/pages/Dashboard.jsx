@@ -49,7 +49,7 @@ export default function Dashboard() {
   }, [filter]);
 
   return (
-    <div className="h-full bg-zinc-300">
+    <div className="h-full bg-zinc-200 pb-5">
       <Appbar lastName={lastName} user={userName} />
       <div>
         <div className="px-3 mt-5 text-xl font-bold">

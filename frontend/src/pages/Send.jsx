@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
 function Send() {
@@ -7,6 +7,7 @@ function Send() {
   const userId = searchParams.get("id");
   const userName = searchParams.get("name");
   const [balance, setBalance] = useState(0);
+  const navigate = useNavigate();
 
   function onSend() {
     axios
@@ -24,7 +25,7 @@ function Send() {
       )
       .then((res) => {
         console.log(res.data);
-        console.log("tranfer successfull");
+        navigate("/dashboard");
       });
   }
   return (
