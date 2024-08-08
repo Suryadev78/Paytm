@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
-mongoose.connect(
-  "mongodb+srv://pandeysuryadev00:Zoro%407822@cluster0.otzzmf8.mongodb.net/"
-);
+mongoose.connect("your mongoDb URL");
 
 const userSchema = new mongoose.Schema({
   firstName: {
