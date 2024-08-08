@@ -3,6 +3,10 @@ Created a basic version of Paytm Which includes both Frontend and Backend Using 
 
 -How it Looks
 
+![Screenshot (24)](https://github.com/user-attachments/assets/81043924-9968-410a-95ef-9e298e27a751)
+![Screenshot (25)](https://github.com/user-attachments/assets/5e7379b4-2573-4171-8883-9f96ea8ab3bf)
+
+
 Setup the Project Locally
 Clone the repository
 Go to the project folder using an IDE of your preference
