@@ -4,6 +4,9 @@ import axios from "axios";
 export default function Me() {
   const [me, setMe] = useState({});
   const [balance, setBalance] = useState(0);
+  let userAmount = balance;
+  userAmount = userAmount.toFixed(2);
+  userAmount = parseFloat(userAmount);
 
   useEffect(() => {
     axios
@@ -17,7 +20,7 @@ export default function Me() {
     axios
       .get("http://localhost:3002/api/v1/account/balance", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
       .then((res) => setBalance(res.data.balance));
@@ -40,7 +43,7 @@ export default function Me() {
         <div className="flex flex-col justify-center items-center">
           <h2 className="mt-3 text-xl font-bold underline ">Your balance :</h2>
           <div className="w-40 h-32 bg-slate-200 flex justify-center items-center rounded-lg mt-6">
-            <h4 className="text-lg font-semibold">INR : {balance.balance}</h4>
+            <h4 className="text-lg font-semibold">INR : {userAmount}</h4>
           </div>
         </div>
       </div>
