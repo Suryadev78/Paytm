@@ -42,7 +42,7 @@ router.post("/signup", async function (req, res) {
       balance: 1 + Math.random() * 1000,
     });
 
-    const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "10m" });
+    const token = jwt.sign({ userId }, JWT_SECRET);
     res.json({ message: "User created successfully", token });
   } else {
     res.status(403).json({ message: "Invalid Credentials" });
@@ -62,9 +62,7 @@ router.post("/signin", async function (req, res) {
   if (!user) {
     res.status(400).json({ message: "Invalid user" });
   } else {
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
-      expiresIn: "10m",
-    });
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET);
     res.status(200).json({ message: "User found", token });
   }
 });
@@ -105,5 +103,19 @@ router.get("/bulk", async function (req, res) {
       _id: user._id,
     })),
   });
+});
+
+router.get("/me", authMiddleware, async function (req, res) {
+  const userId = req.userId;
+  const user = await User.findOne({ _id: userId });
+  if (user) {
+    res.json({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      userId: user._id,
+    });
+  } else {
+    res.status(404).json({ message: "User not found" });
+  }
 });
 export default router;
