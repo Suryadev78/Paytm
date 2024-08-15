@@ -53,7 +53,7 @@ export default function Signin() {
               setPassword(e.target.value);
             }}
             className="w-11/12 ml-3 mt-2 p-1 border"
-            type="number"
+            type="password"
             placeholder="******"
           />
           <div className="flex justify-center items-center mt-7">

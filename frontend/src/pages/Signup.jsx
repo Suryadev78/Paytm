@@ -79,7 +79,7 @@ export default function Signup() {
             <input
               required
               className="w-5/6 p-1 mt-1 rounded-sm border"
-              type="text"
+              type="password"
               {...register("password")}
               placeholder="******"
             />
