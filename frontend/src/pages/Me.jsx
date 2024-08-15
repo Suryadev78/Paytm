@@ -28,7 +28,7 @@ export default function Me() {
 
   return (
     <div className="h-screen bg-zinc-300 flex justify-center items-center">
-      <div className=" w-80 h-4/6 rounded-md bg-white">
+      <div className=" w-80 h-4/6 rounded-md hover:scale-105 bg-white">
         <h2 className="text-center text-2xl font-semibold">Your profile</h2>
         <div className="flex pl-2 mt-5 gap-3 text-xl font-semibold flex-col">
           <div className="flex justify-center items-center">
