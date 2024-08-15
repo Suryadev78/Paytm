@@ -8,7 +8,7 @@ export default function Appbar({ user, lastName }) {
     <div className="bg-white shadow-md p-1 px-3 flex justify-between items-center">
       <div className="text-2xl font-semibold">Paytm</div>
       <div className="flex gap-4">
-        <div className="flex justify-center items-center underline   hover:cursor-pointer text-xl font-semibold text-green-400">
+        <div className="flex justify-center items-center underline   hover:cursor-pointer hover:scale-95 text-2xl font-semibold text-cyan-400">
           <button onClick={() => navigate("/me")}>Profile</button>
         </div>
         <div className="flex justify-center text-xl font-semibold  items-center">

@@ -5,11 +5,11 @@ export default function Users({ user }) {
   const navigate = useNavigate();
   return (
     <div className="flex justify-between px-5 mt-4">
-      <div className="flex gap-3 ">
+      <div className="flex gap-3 hover:scale-95 ">
         <div className="w-10 h-10 rounded-full font-semibold bg-slate-400 flex justify-center items-center">
           {user.firstName[0]}
         </div>
-        <div className="text-xl flex justify-center items-center font-semibold">
+        <div className="text-xl  flex justify-center items-center font-semibold">
           {user.firstName}
         </div>
         <div className="text-xl flex justify-center items-center font-semibold">
@@ -21,7 +21,7 @@ export default function Users({ user }) {
           onClick={() => {
             navigate("/send?id=" + user._id + "&name=" + user.firstName);
           }}
-          className="bg-gray-800 px-2 py-1 rounded-md text-white"
+          className="bg-gray-800 hover:scale-90 px-2 py-1 rounded-md text-white"
         >
           Send Money
         </button>
