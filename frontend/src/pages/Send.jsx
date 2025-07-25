@@ -12,7 +12,7 @@ function Send() {
   function onSend() {
     axios
       .post(
-        "http://localhost:3002/api/v1/account/transfer",
+        "https://paytm-1-8ekl.onrender.com/api/v1/account/transfer",
         {
           to: userId,
           amount: balance,

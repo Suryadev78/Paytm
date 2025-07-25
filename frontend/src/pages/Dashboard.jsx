@@ -29,7 +29,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     const res = axios
-      .get("http://localhost:3002/api/v1/account/balance", {
+      .get("https://paytm-1-8ekl.onrender.com/api/v1/account/balance", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -44,7 +44,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3002/api/v1//user/bulk?filter=" + filter)
+      .get("https://paytm-1-8ekl.onrender.com/api/v1/user/bulk?filter=" + filter)
       .then((response) => {
         setUser(response.data.user);
       });
