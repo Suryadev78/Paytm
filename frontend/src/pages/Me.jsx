@@ -4,16 +4,16 @@ import axios from "axios";
 export default function Me() {
   const [me, setMe] = useState({});
   const [balance, setBalance] = useState(0);
-  let userAmount = balance;
-  userAmount = userAmount.toFixed(2);
-  userAmount = parseFloat(userAmount);
+
+  const userAmount = parseFloat(balance.toFixed(2));
 
   useEffect(() => {
     axios
       .get("http://localhost:3002/api/v1/user/me", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
-      .then((res) => setMe(res.data));
+      .then((res) => setMe(res.data))
+      .catch((err) => console.error("User fetch error:", err));
   }, []);
 
   useEffect(() => {
@@ -23,27 +23,32 @@ export default function Me() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
-      .then((res) => setBalance(res.data.balance));
+      .then((res) => setBalance(res.data.balance))
+      .catch((err) => console.error("Balance fetch error:", err));
   }, []);
 
   return (
-    <div className="h-screen bg-zinc-300 flex justify-center items-center">
-      <div className=" w-80 h-4/6 rounded-md hover:scale-105 bg-white">
-        <h2 className="text-center text-2xl font-semibold">Your profile</h2>
-        <div className="flex pl-2 mt-5 gap-3 text-xl font-semibold flex-col">
-          <div className="flex justify-center items-center">
-            <h2>
-              Name : {me.firstName} {me.lastName}
-            </h2>
+    <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4">
+      <div className="w-full max-w-sm bg-white rounded-xl shadow-md p-6 transition-transform duration-300 hover:scale-105">
+        <h2 className="text-2xl font-bold text-center text-blue-600 mb-6">
+          Your Profile
+        </h2>
+
+        <div className="space-y-4 text-lg font-medium text-gray-800">
+          <div className="text-center">
+            Name: {me.firstName || "N/A"} {me.lastName || ""}
           </div>
-          <div className="flex justify-center items-center">
-            <h2>UserId : {me.userId}</h2>
-          </div>
+          <div className="text-center">User ID: {me.userId || "N/A"}</div>
         </div>
-        <div className="flex flex-col justify-center items-center">
-          <h2 className="mt-3 text-xl font-bold underline ">Your balance :</h2>
-          <div className="w-40 h-32 bg-slate-200 flex justify-center items-center rounded-lg mt-6">
-            <h4 className="text-lg font-semibold">INR : {userAmount}</h4>
+
+        <div className="mt-8 text-center">
+          <h3 className="text-xl font-semibold underline text-gray-700">
+            Your Balance:
+          </h3>
+          <div className="mt-4 w-40 h-24 mx-auto bg-gray-100 rounded-lg flex items-center justify-center shadow-inner">
+            <span className="text-lg font-bold text-gray-700">
+              INR: {userAmount}
+            </span>
           </div>
         </div>
       </div>
