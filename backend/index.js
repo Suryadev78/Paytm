@@ -10,4 +10,6 @@ import zod from "zod";
 
 app.use("/api/v1", mainrouter);
 
-app.listen(3002);
+app.listen(3002, () => {
+  console.log("Server is running on port 3002");
+});
