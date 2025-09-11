@@ -1,34 +1,31 @@
+// db.js
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config(); // Load .env variables
 
 const MONGO_URI = process.env.MONGO_URI;
 
+if (!MONGO_URI) {
+  // console.error("❌ MONGO_URI is not defined in .env");
+  process.exit(1);
+}
+
+// Function to connect to MongoDB
 async function connectDB() {
   try {
     const conn = await mongoose.connect(MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-
-    // Extract safe info from URI
-    if (MONGO_URI) {
-      try {
-        const url = new URL(MONGO_URI);
-        console.log("✅ Connected to cluster:", url.hostname);
-        console.log("✅ Database name:", url.pathname.replace("/", ""));
-      } catch (e) {
-        console.log("⚠️ Could not parse MONGO_URI");
-      }
-    }
-
-    console.log(`🚀 MongoDB Connected: ${conn.connection.host}`);
+    // console.log("✅ Connected to cluster:", conn.connection.host);
+    // console.log("✅ Database name:", conn.connection.name);
   } catch (err) {
-    console.error("❌ MongoDB connection error:", err.message);
+    // console.error("❌ MongoDB connection error:", err.message);
     process.exit(1);
   }
 }
 
-connectDB();
-
+// User schema
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
@@ -49,6 +46,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, minLength: 3, required: true },
 });
 
+// Bank / Account schema
 const bankSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -61,8 +59,10 @@ const bankSchema = new mongoose.Schema({
   },
 });
 
+// Models
 const User = mongoose.model("User", userSchema);
 const Account = mongoose.model("Account", bankSchema);
 
-export default User;
-export { Account };
+// Export
+export default connectDB;
+export { User, Account };
