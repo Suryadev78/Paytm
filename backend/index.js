@@ -1,18 +1,17 @@
 import express from "express";
-import dotenv from "dotenv";
-dotenv.config();
-const app = express();
 import cors from "cors";
-app.use(cors({
-    origin: ["http://localhost:3000", "https://paytm-liard.vercel.app"],
-    credentials: true
-  }));
-app.use(express.json());
+import connectDB from "./db/db.js";
 import mainrouter from "./routes/authenty.js";
-import User from "./db/db.js";
-import uerValidateSchema from "./zod/zod.js";
-import zod from "zod";
 
+const app = express();
+connectDB(); // Connect to MongoDB
+
+app.use(cors({
+  origin: ["http://localhost:3000", "https://paytm-liard.vercel.app","http://localhost:5173"],
+  credentials: true
+}));
+
+app.use(express.json());
 app.use("/api/v1", mainrouter);
 
 app.listen(3002, () => {
