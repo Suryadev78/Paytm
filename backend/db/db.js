@@ -1,8 +1,34 @@
 import mongoose from "mongoose";
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+
+const MONGO_URI = process.env.MONGO_URI;
+
+async function connectDB() {
+  try {
+    const conn = await mongoose.connect(MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    // Extract safe info from URI
+    if (MONGO_URI) {
+      try {
+        const url = new URL(MONGO_URI);
+        console.log("✅ Connected to cluster:", url.hostname);
+        console.log("✅ Database name:", url.pathname.replace("/", ""));
+      } catch (e) {
+        console.log("⚠️ Could not parse MONGO_URI");
+      }
+    }
+
+    console.log(`🚀 MongoDB Connected: ${conn.connection.host}`);
+  } catch (err) {
+    console.error("❌ MongoDB connection error:", err.message);
+    process.exit(1);
+  }
+}
+
+connectDB();
+
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
@@ -34,6 +60,7 @@ const bankSchema = new mongoose.Schema({
     required: true,
   },
 });
+
 const User = mongoose.model("User", userSchema);
 const Account = mongoose.model("Account", bankSchema);
 
