@@ -9,7 +9,7 @@ export default function Me() {
 
   useEffect(() => {
     axios
-      .get("https://paytm-1-8ekl.onrender.com/api/v1/user/me", {
+      .get("https://paytm-292b.onrender.com/api/v1/user/me", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((res) => setMe(res.data))
@@ -18,7 +18,7 @@ export default function Me() {
 
   useEffect(() => {
     axios
-      .get("https://paytm-1-8ekl.onrender.com/api/v1/account/balance", {
+      .get("https://paytm-292b.onrender.com/api/v1/account/balance", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

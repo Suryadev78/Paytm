@@ -1,27 +1,52 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { Lock, Mail, LogIn } from "lucide-react";
+import * as z from "zod";
+
+// 1️⃣ Zod schema for strict validation
+const signinSchema = z.object({
+  userName: z.string().email("Enter a valid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
 
 export default function Signin() {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
 
-  async function signInClick() {
-    const res = await axios.post("https://paytm-1-8ekl.onrender.com/api/v1/user/signin", {
-      userName,
-      password,
-    });
-    console.log(res);
-    const yourToken = res.data.token;
-    console.log("Everything went smooth");
-    if (!yourToken) {
-      console.log("Your account is invalid");
-      navigate("/");
-    } else {
-      navigate("/dashboard");
-      localStorage.setItem("token", res.data.token);
+  // 2️⃣ useForm with Zod
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(signinSchema),
+  });
+
+  // 3️⃣ Signin function
+  async function signInClick(data) {
+    try {
+      const res = await axios.post(
+        "https://paytm-292b.onrender.com/api/v1/user/signin",
+        {
+          userName: data.userName,
+          password: data.password,
+        }
+      );
+
+      const yourToken = res.data.token;
+      if (!yourToken) {
+        console.log("Invalid credentials");
+        navigate("/signin");
+      } else {
+        localStorage.setItem("token", yourToken);
+        navigate("/dashboard");
+      }
+
+      console.log(res);
+    } catch (e) {
+      console.error("Sign-in error:", e.response?.data || e.message);
     }
   }
 
@@ -43,42 +68,49 @@ export default function Signin() {
 
         {/* Form */}
         <div className="px-8 py-8">
-          <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); signInClick(); }}>
+          <form
+            className="space-y-6"
+            onSubmit={handleSubmit(signInClick)}
+          >
             {/* Email */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="email">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Email Address
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
-                  required
-                  onChange={(e) => setUserName(e.target.value)}
                   className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
                   type="text"
                   placeholder="abc@example.com"
+                  {...register("userName")}
                 />
               </div>
+              {errors.userName && (
+                <p className="text-red-500 text-sm mt-1">{errors.userName.message}</p>
+              )}
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="password">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
-                  required
-                  onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
                   type="password"
                   placeholder="******"
+                  {...register("password")}
                 />
               </div>
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+              )}
             </div>
 
-            
+            {/* Submit Button */}
             <button
               type="submit"
               className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
@@ -87,7 +119,7 @@ export default function Signin() {
             </button>
           </form>
 
-          
+          {/* Signup Link */}
           <div className="text-center mt-8 pt-6 border-t border-gray-200">
             <p className="text-gray-600">
               Don’t have an account?{" "}
