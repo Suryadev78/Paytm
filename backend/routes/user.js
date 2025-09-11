@@ -5,7 +5,7 @@ const app = express();
 const router = express.Router();
 app.use(bodyParser.json());
 import userValidateSchema from "../zod/zod.js";
-import User, { Account } from "../db/db.js";
+import { User, Account } from "../db/db.js";
 import JWT_SECRET from "../config.js";
 import authMiddleware from "../middlewares/usermiddle.js";
 
