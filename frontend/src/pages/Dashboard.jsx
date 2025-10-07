@@ -12,50 +12,55 @@ export default function Dashboard() {
   const lastName = searchParams.get("lastName");
   const [user, setUser] = useState([]);
   const [filter, setFilter] = useState("");
-  const [balance, setBalance] = useState("");
+  const [balance, setBalance] = useState({ balance: 0 });
 
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/signin");
     }
-  },[]);
-  
-  setTimeout(() => {
-    localStorage.removeItem("token");
-  }, 600000);
+  }, [navigate]);
+
+ 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      localStorage.removeItem("token");
+      navigate("/signin"); 
+    }, 600000);
+
+    return () => clearTimeout(timer); 
+  }, [navigate]);
 
   useEffect(() => {
-    const res = axios
-      .get("https://paytm-292b.onrender.com/api/v1/account/balance", {  
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    axios
+      .get("https://paytm-292b.onrender.com/api/v1/account/balance", {
+        headers: { Authorization: `Bearer ${token}` },
       })
-      .then((res) => {
-        setBalance(res.data);
-      });
-    if (!res) {
-      console.log("Some error occurred while verifying jwt");
-    }
+      .then((res) => setBalance(res.data))
+      .catch((err) => console.log("Error fetching balance:", err));
   }, []);
+
 
   useEffect(() => {
     axios
-      .get("https://paytm-292b.onrender.com/api/v1/user/bulk?filter=" + filter)
+      .get(`https://paytm-292b.onrender.com/api/v1/user/bulk?filter=${filter}`)
       .then((response) => {
         setUser(response.data.user);
-      });
+      })
+      .catch((err) => console.log("Error fetching users:", err));
   }, [filter]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Appbar lastName={lastName} user={userName} />
-      
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome Section */}
+    
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Welcome back, {userName}!
@@ -65,7 +70,6 @@ export default function Dashboard() {
           </p>
         </div>
 
-        {/* Balance Card */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -87,9 +91,9 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Users Section */}
+  
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-          {/* Header */}
+    
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-100">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -102,24 +106,20 @@ export default function Dashboard() {
                 </div>
               </div>
               <div className="text-sm text-gray-500">
-                {user.length} user{user.length !== 1 ? 's' : ''} found
+                {user.length} user{user.length !== 1 ? "s" : ""} found
               </div>
             </div>
           </div>
-
-          {/* Search Section */}
           <div className="p-6 border-b border-gray-100">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <SearchBar 
+              <SearchBar
                 onChange={(e) => setFilter(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
                 placeholder="Search users..."
               />
             </div>
           </div>
-
-          {/* Users List */}
           <div className="divide-y divide-gray-100">
             {user.length > 0 ? (
               user.map((user, index) => (
