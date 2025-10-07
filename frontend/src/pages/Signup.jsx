@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,14 +14,14 @@ const signupSchema = z.object({
 });
 
 export default function Signup() {
-  // 2️⃣ useForm with Zod resolver
+  const [error, setError] = useState("");
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: zodResolver(signupSchema),
   });
-
   const navigate = useNavigate();
 
   async function sigUpInfo(data) {
+    setError("");
     try {
       const res = await axios.post(
         "https://paytm-292b.onrender.com/api/v1/user/signup",
@@ -36,12 +36,11 @@ export default function Signup() {
       localStorage.setItem("token", res.data.token);
       reset();
       navigate(
-        "/dashboard?name=" + data.firstName + "&lastname=" + data.lastName
+        `/dashboard?name=${data.firstName}&lastname=${data.lastName}`
       );
 
-      console.log(res);
     } catch (e) {
-      console.log("error", e);
+      setError(e.response?.data?.message || "signup failed");
     }
   }
 
@@ -59,13 +58,15 @@ export default function Signup() {
             Create your account to get started
           </p>
         </div>
+
         <div className="px-8 py-8">
-          <form
-            className="space-y-6"
-            onSubmit={handleSubmit(sigUpInfo)}
-          >
+          {error && (
+            <p className="text-red-500 text-center mb-4 font-medium">{error}</p>
+          )}
+
+          <form className="space-y-6" onSubmit={handleSubmit(sigUpInfo)}>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="firstName">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
                 First Name
               </label>
               <div className="relative">
@@ -80,7 +81,7 @@ export default function Signup() {
               {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>}
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="lastName">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Last Name
               </label>
               <div className="relative">
@@ -96,7 +97,7 @@ export default function Signup() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="email">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Email Address
               </label>
               <div className="relative">
@@ -110,8 +111,9 @@ export default function Signup() {
               </div>
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
             </div>
+
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="password">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Password
               </label>
               <div className="relative">
@@ -125,6 +127,7 @@ export default function Signup() {
               </div>
               {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
             </div>
+
             <button
               type="submit"
               className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
@@ -132,6 +135,7 @@ export default function Signup() {
               Create Account
             </button>
           </form>
+
           <div className="text-center mt-8 pt-6 border-t border-gray-200">
             <p className="text-gray-600">
               Already have an account?{" "}
