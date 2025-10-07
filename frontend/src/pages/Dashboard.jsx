@@ -11,7 +11,8 @@ export default function Dashboard() {
   const userName = searchParams.get("name");
   const lastName = searchParams.get("lastName");
   const [user, setUser] = useState([]);
-  const [filter, setFilter] = useState("");
+  const [me, setMe] = useState(null);
+   const [filter, setFilter] = useState("");
   const [balance, setBalance] = useState({ balance: 0 });
 
   const navigate = useNavigate();
@@ -45,6 +46,21 @@ export default function Dashboard() {
       .catch((err) => console.log("Error fetching balance:", err));
   }, []);
 
+  useEffect(() => {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  axios
+    .get("https://paytm-292b.onrender.com/api/v1/user/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then((res) => {
+      setMe(res.data);
+    })
+    .catch((err) => console.log("Error fetching user:", err));
+}, []);
+
+
 
   useEffect(() => {
     axios
@@ -63,7 +79,7 @@ export default function Dashboard() {
     
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {userName}!
+           Welcome back, {me?.firstName} {me?.lastName}
           </h1>
           <p className="text-gray-600">
             Manage your account and connect with other users
