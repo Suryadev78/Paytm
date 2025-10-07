@@ -21,7 +21,7 @@ export default function Dashboard() {
     if (!token) {
       navigate("/signin");
     }
-  });
+  },[]);
   
   setTimeout(() => {
     localStorage.removeItem("token");
