@@ -29,7 +29,7 @@ export default function Dashboard() {
     const timer = setTimeout(() => {
       localStorage.removeItem("token");
       navigate("/signin"); 
-    }, 600000);
+    }, 7200000);
 
     return () => clearTimeout(timer); 
   }, [navigate]);
